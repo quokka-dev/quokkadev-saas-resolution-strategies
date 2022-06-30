@@ -130,7 +130,7 @@ jobs:
       - name: Pack QuokkaDev.Saas.ResolutionStrategies
         run: dotnet pack src/QuokkaDev.Saas.ResolutionStrategies/QuokkaDev.Saas.ResolutionStrategies.csproj -c Release /p:Version=${{ steps.calculate_version.outputs.version }} 
       - name: Publish to GitHub package QuokkaDev.Saas.ResolutionStrategies 
-        run: dotnet nuget push src/QuokkaDev.Saas.ResolutionStrategies/bin/Release/*.nupkg ${{ secrets.NUGET_TOKEN }} -s https://api.nuget.org/v3/index.json  
+        run: dotnet nuget push src/QuokkaDev.Saas.ResolutionStrategies/bin/Release/*.nupkg --api-key ${{ secrets.NUGET_TOKEN }} -s https://api.nuget.org/v3/index.json  
 
       # Tag the version on main
 
