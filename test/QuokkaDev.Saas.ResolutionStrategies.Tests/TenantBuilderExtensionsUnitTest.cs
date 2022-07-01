@@ -74,7 +74,6 @@ namespace QuokkaDev.Saas.ResolutionStrategies.Tests
             var settings = services.FirstOrDefault(sd => sd.ServiceType == typeof(HeaderResolutionStrategySettings));
             var settingsInstance = settings?.ImplementationInstance as HeaderResolutionStrategySettings;
 
-
             // Assert
             settings.Should().NotBeNull();
             settings?.ImplementationType.Should().BeNull();
