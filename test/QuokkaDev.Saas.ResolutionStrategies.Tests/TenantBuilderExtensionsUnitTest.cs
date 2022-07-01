@@ -21,8 +21,7 @@ namespace QuokkaDev.Saas.ResolutionStrategies.Tests
             IServiceCollection services = new ServiceCollection();
 
             // Act
-            services.AddMultiTenancy()
-                .WithDevResolutionStrategy("my-tenant-identifier");
+            services.AddMultiTenancy().WithDevResolutionStrategy("my-tenant-identifier");
             var strategy = services.FirstOrDefault(sd => sd.ServiceType == typeof(ITenantResolutionStrategy));
 
             // Assert
@@ -40,11 +39,7 @@ namespace QuokkaDev.Saas.ResolutionStrategies.Tests
             IServiceCollection services = new ServiceCollection();
 
             // Act
-            services.AddMultiTenancy()
-                .WithHeaderResolutionStrategy(opts =>
-                {
-                    opts.HeaderName = "X-Custom-Header-Name";
-                });
+            services.AddMultiTenancy().WithHeaderResolutionStrategy(opts => opts.HeaderName = "X-Custom-Header-Name");
             var strategy = services.FirstOrDefault(sd => sd.ServiceType == typeof(ITenantResolutionStrategy));
             var settings = services.FirstOrDefault(sd => sd.ServiceType == typeof(HeaderResolutionStrategySettings));
             var settingsInstance = settings?.ImplementationInstance as HeaderResolutionStrategySettings;
@@ -63,9 +58,31 @@ namespace QuokkaDev.Saas.ResolutionStrategies.Tests
             settings?.ImplementationInstance.Should().NotBeNull();
             settings?.ImplementationInstance.Should().BeOfType<HeaderResolutionStrategySettings>();
 
-            settingsInstance.HeaderName.Should().Be("X-Custom-Header-Name");
+            settingsInstance?.HeaderName.Should().Be("X-Custom-Header-Name");
 
             httpContextAccessor.Should().NotBeNull();
+        }
+
+        [Fact(DisplayName = "HeaderResolutionStrategy should be use default settings")]
+        public void HeaderResolutionStrategy_Should_Be_Use_Default_Settings()
+        {
+            // Arrange
+            IServiceCollection services = new ServiceCollection();
+
+            // Act
+            services.AddMultiTenancy().WithHeaderResolutionStrategy();
+            var settings = services.FirstOrDefault(sd => sd.ServiceType == typeof(HeaderResolutionStrategySettings));
+            var settingsInstance = settings?.ImplementationInstance as HeaderResolutionStrategySettings;
+
+
+            // Assert
+            settings.Should().NotBeNull();
+            settings?.ImplementationType.Should().BeNull();
+            settings?.Lifetime.Should().Be(ServiceLifetime.Singleton);
+            settings?.ImplementationInstance.Should().NotBeNull();
+            settings?.ImplementationInstance.Should().BeOfType<HeaderResolutionStrategySettings>();
+
+            settingsInstance?.HeaderName.Should().Be("X-TenantIdentifier");
         }
 
         [Fact(DisplayName = "HostResolutionStrategy should be used")]
@@ -75,8 +92,7 @@ namespace QuokkaDev.Saas.ResolutionStrategies.Tests
             IServiceCollection services = new ServiceCollection();
 
             // Act
-            services.AddMultiTenancy()
-                .WithHostResolutionStrategy();
+            services.AddMultiTenancy().WithHostResolutionStrategy();
             var strategy = services.FirstOrDefault(sd => sd.ServiceType == typeof(ITenantResolutionStrategy));
             var httpContextAccessor = services.FirstOrDefault(sd => sd.ServiceType == typeof(IHttpContextAccessor));
 
@@ -97,8 +113,7 @@ namespace QuokkaDev.Saas.ResolutionStrategies.Tests
             IServiceCollection services = new ServiceCollection();
 
             // Act
-            services.AddMultiTenancy()
-                .WithPathResolutionStrategy();
+            services.AddMultiTenancy().WithPathResolutionStrategy();
             var strategy = services.FirstOrDefault(sd => sd.ServiceType == typeof(ITenantResolutionStrategy));
             var httpContextAccessor = services.FirstOrDefault(sd => sd.ServiceType == typeof(IHttpContextAccessor));
 
