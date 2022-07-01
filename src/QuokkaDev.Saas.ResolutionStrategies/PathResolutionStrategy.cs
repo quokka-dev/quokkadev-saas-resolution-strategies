@@ -17,8 +17,8 @@ namespace QuokkaDev.Saas.ResolutionStrategies
 
         public string GetTenantIdentifier()
         {
-            var tokens = _httpContextAccessor.HttpContext.Request.Path.Value?.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-            if (tokens?.Length > 0)
+            var tokens = _httpContextAccessor.HttpContext.Request.Path.Value.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+            if (tokens.Length > 0)
             {
                 return tokens[0];
             }
